@@ -30,5 +30,6 @@ if (isset($_POST['signoutbtn'])) {
      auth::logout();
 }
 
-$loggedinUser = DB::query('SELECT * FROM users WHERE user_user_id=:id', [':id'=>auth::loggedin()]);
-$user = new user;
+if (auth::loggedin()) {
+     $user = new user;
+}

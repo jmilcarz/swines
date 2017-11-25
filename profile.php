@@ -1,16 +1,24 @@
-<?php require_once("./app/init.php");?>
+<?php require_once("./app/init.php");
+
+if(!isset($_GET['u'])) {
+     header("Location: index.php");
+     exit();
+}
+$u = $_GET['u'];
+$uuser = DB::query('SELECT * FROM users WHERE user_user_id=:uuid', ['uuid'=>$u])[0];
+?>
 <!DOCTYPE html>
 <html lang="<?php echo init::$system_lang; ?>">
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <title><?php echo init::$system_name; ?></title>
+     <title><?php echo $uuser['user_firstname'] . " " . $uuser['user_lastname'] . " | " . init::$system_name; ?></title>
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
      <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 <body>
-     
+
      <?php
           require_once('modules/nav.php');
           require_once('modules/timeline.php');
