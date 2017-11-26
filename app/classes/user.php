@@ -2,7 +2,7 @@
 
 class User {
 
-     public $id, $firstname, $lastname, $email, $phone, $gender, $dob, $profile_img, $background_img, $active, $points;
+     public $id, $firstname, $lastname, $email, $phone, $gender, $dob, $profile_img, $background_img, $active, $points, $friends;
      protected $password;
 
      public function __construct() {
@@ -19,6 +19,7 @@ class User {
           $this->background_img = DB::query('SELECT user_profile_background_picture FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_profile_background_picture'];
           $this->active = DB::query('SELECT user_active FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_active'];
           $this->points = DB::query('SELECT user_points FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_points'];
+          $this->friends = DB::query('SELECT user_friends FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_friends'];
      }
 
      public static function all() {
@@ -34,8 +35,48 @@ class User {
           // delete user
      }
 
-     public static function displayInfo() {
-          // info modal
+     public static function searchAll($phrase) {
+          // search page
+          $users = DB::query("SELECT * FROM users WHERE user_firstname OR user_lastname OR user_email LIKE '%" . $phrase . "%'");
+          ?>
+               <div class="container" id="main-container">
+                    <div class="row">
+                         <div class="col-xl-10 ml-auto mr-auto" id="searchpage">
+                              <div class="card">
+                                   <?php
+                                   if (count($users) < 1) {
+                                        echo "<h1>brak wyników dla frazy <b>" . $phrase . "</b> :/</h1>";
+                                        exit();
+                                   }
+                                   if ($phrase != "") {
+                                        echo "<h1>wyniki wyszukiwania dla frazy <b>" . $phrase . "</b></h1>";
+                                   }
+
+                                   ?>
+
+                                   <ul class="list-group">
+                                        <div class="row">
+                                             <?php foreach ($users as $user) { ?>
+                                             <a class="col-xl-4" href="profile.php?u=<?php echo $user['user_user_id']; ?>">
+                                                  <div class="card">
+                                                       <img class="card-img-top" src="<?php echo $user['user_profile_picture']; ?>" alt=""/>
+                                                       <div class="card-body">
+                                                            <h4 class="card-title"><?php echo $user['user_firstname'] . " " . $user['user_lastname']; ?></h4>
+                                                            <form>
+                                                                 <input type="hidden" name="userid" value="<?php echo $user['user_user_id']; ?>">
+                                                                 <button class="btn btn-swines" type="submit" name="add-to-friend">dodaj do znajomych</button>
+                                                            </form>
+                                                       </div>
+                                                  </div>
+                                             </a>
+                                             <?php } ?>
+                                        </div>
+                                   </ul>
+                              </div>
+                         </div>
+                    </div>
+               </div>
+               <?php
      }
 
 }

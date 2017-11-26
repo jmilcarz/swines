@@ -42,7 +42,7 @@
                               <footer>
                                    <div class="column border-next">
                                         <h1>Znajomi</h1>
-                                        <h2>143</h2>
+                                        <h2><?php echo $uuser['user_friends']; ?></h2>
                                    </div>
                                    <div class="column">
                                         <h1>Punkty</h1>

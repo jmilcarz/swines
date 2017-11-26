@@ -100,8 +100,14 @@ class auth {
                if ($password == $rpassword) {
                     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
                     if (!DB::query('SELECT user_email FROM users WHERE user_email=:user_email', [':user_email'=>$email])) {
-
-                         DB::query('INSERT INTO users VALUES (\'\', :firstname, :lastname, :email, :password, :phone, :gender, :dob, \'\', \'\', \'\', 0, 0)', [':firstname'=>$firstname, ':lastname'=>$lastname, ':email'=>$email, ':password'=>password_hash($password, PASSWORD_BCRYPT), ':phone'=>$phone, ':gender'=>$gender, ':dob'=>$dob]);
+                         if ($gender == 'm') {
+                              $profileimg = "public_files/def/user-male.jpg";
+                         }else {
+                              $profileimg = "public_files/def/user-female.jpg";
+                         }
+                         $backgroundimg = "public_files/def/background.png";
+                         $points = 50;
+                         DB::query('INSERT INTO users VALUES (\'\', :firstname, :lastname, :email, :password, :phone, :gender, :dob, \'\', :profileimg, :backgroundimg, 0, :points, 0)', [':firstname'=>$firstname, ':lastname'=>$lastname, ':email'=>$email, ':password'=>password_hash($password, PASSWORD_BCRYPT), ':phone'=>$phone, ':gender'=>$gender, ':dob'=>$dob, ':profileimg'=>$profileimg, ':backgroundimg'=>$backgroundimg, ':points'=>$points]);
                          Mail::sendMail('Welcome!', 'Your account has been created!', $email);
                          self::login($phone, $password);
                          header("Location: profile.php");
