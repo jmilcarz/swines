@@ -106,8 +106,9 @@ class auth {
                               $profileimg = "public_files/def/user-female.jpg";
                          }
                          $backgroundimg = "public_files/def/background.png";
+                         $fullname = $firstname . " " . $lastname;
                          $points = 50;
-                         DB::query('INSERT INTO users VALUES (\'\', :firstname, :lastname, :email, :password, :phone, :gender, :dob, \'\', :profileimg, :backgroundimg, 0, :points, 0)', [':firstname'=>$firstname, ':lastname'=>$lastname, ':email'=>$email, ':password'=>password_hash($password, PASSWORD_BCRYPT), ':phone'=>$phone, ':gender'=>$gender, ':dob'=>$dob, ':profileimg'=>$profileimg, ':backgroundimg'=>$backgroundimg, ':points'=>$points]);
+                         DB::query('INSERT INTO users VALUES (\'\', :fullname, :firstname, :lastname, :email, :password, :phone, :gender, :dob, \'\', :profileimg, :backgroundimg, 0, :points, 0)', [':fullname'=>$fullname, ':firstname'=>$firstname, ':lastname'=>$lastname, ':email'=>$email, ':password'=>password_hash($password, PASSWORD_BCRYPT), ':phone'=>$phone, ':gender'=>$gender, ':dob'=>$dob, ':profileimg'=>$profileimg, ':backgroundimg'=>$backgroundimg, ':points'=>$points]);
                          Mail::sendMail('Welcome!', 'Your account has been created!', $email);
                          self::login($phone, $password);
                          header("Location: profile.php");

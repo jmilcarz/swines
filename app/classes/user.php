@@ -2,11 +2,12 @@
 
 class User {
 
-     public $id, $firstname, $lastname, $email, $phone, $gender, $dob, $profile_img, $background_img, $active, $points, $friends;
+     public $id, $fullname, $firstname, $lastname, $email, $phone, $gender, $dob, $profile_img, $background_img, $active, $points, $friends;
      protected $password;
 
      public function __construct() {
           $this->id = DB::query('SELECT user_user_id FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_user_id'];
+          $this->fullname = DB::query('SELECT user_full_name FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_full_name'];
           $this->firstname = DB::query('SELECT user_firstname FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_firstname'];
           $this->lastname = DB::query('SELECT user_lastname FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_lastname'];
           $this->email = DB::query('SELECT user_email FROM users WHERE user_user_id=:uuid', [':uuid'=>auth::loggedin()])[0]['user_email'];
@@ -37,7 +38,7 @@ class User {
 
      public static function searchAll($phrase) {
           // search page
-          $users = DB::query("SELECT * FROM users WHERE user_firstname OR user_lastname OR user_email LIKE '%" . $phrase . "%'");
+          $users = DB::query("SELECT * FROM users WHERE user_full_name LIKE '%" . $phrase . "%'");
           ?>
                <div class="container" id="main-container">
                     <div class="row">
